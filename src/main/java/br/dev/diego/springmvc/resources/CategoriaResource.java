@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping(value = "/categorias")
 public class CategoriaResource {
@@ -26,5 +22,4 @@ public class CategoriaResource {
         Categoria obj = service.find(id);
         return ResponseEntity.ok().body(obj);
     }
-
 }
