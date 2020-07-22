@@ -1,5 +1,7 @@
 package br.dev.diego.springmvc.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ public class Produto implements Serializable {
     private String nome;
     private Double preco;
 
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name = "PRODUTO_CATEGORIA",
                     joinColumns = @JoinColumn(name = "produto_id"),
