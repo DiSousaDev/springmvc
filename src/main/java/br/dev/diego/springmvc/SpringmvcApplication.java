@@ -1,8 +1,12 @@
 package br.dev.diego.springmvc;
 
 import br.dev.diego.springmvc.domain.Categoria;
+import br.dev.diego.springmvc.domain.Cidade;
+import br.dev.diego.springmvc.domain.Estado;
 import br.dev.diego.springmvc.domain.Produto;
 import br.dev.diego.springmvc.repositories.CategoriaRepository;
+import br.dev.diego.springmvc.repositories.CidadeRepository;
+import br.dev.diego.springmvc.repositories.EstadoRepository;
 import br.dev.diego.springmvc.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -19,6 +23,12 @@ public class SpringmvcApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProdutoRepository produtoRepository;
+
+	@Autowired
+	private EstadoRepository estadoRepository;
+
+	@Autowired
+	private CidadeRepository cidadeRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringmvcApplication.class, args);
@@ -43,6 +53,19 @@ public class SpringmvcApplication implements CommandLineRunner {
 
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3));
+
+		Estado est1 = new Estado(null,"Minas Gerais");
+		Estado est2 = new Estado(null,"São Paulo");
+
+		Cidade c1 = new Cidade(null, "Uberlândia", est1);
+		Cidade c2 = new Cidade(null, "São Paulo", est2);
+		Cidade c3 = new Cidade(null, "Campinas", est2);
+
+		est1.getCidades().addAll(Arrays.asList(c1));
+		est1.getCidades().addAll(Arrays.asList(c2,c3));
+
+		estadoRepository.saveAll(Arrays.asList(est1,est2));
+		cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 
 	}
 }
