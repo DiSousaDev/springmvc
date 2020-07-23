@@ -2,8 +2,10 @@ package br.dev.diego.springmvc.services;
 
 import br.dev.diego.springmvc.domain.Categoria;
 import br.dev.diego.springmvc.repositories.CategoriaRepository;
+import br.dev.diego.springmvc.services.exceptions.DataIntegrityException;
 import br.dev.diego.springmvc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,5 +31,14 @@ public class CategoriaService {
     public Categoria update(Categoria obj){
         find(obj.getId());
         return repo.save(obj);
+    }
+
+    public void deleteById(Integer id) {
+        find(id);
+        try {
+            repo.deleteById(id);
+        }catch(DataIntegrityViolationException erro){
+            throw new DataIntegrityException("Não é possível excluir uma categoria com produtos associado.");
+        }
     }
 }
