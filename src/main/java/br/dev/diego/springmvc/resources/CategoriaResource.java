@@ -1,6 +1,7 @@
 package br.dev.diego.springmvc.resources;
 
 import br.dev.diego.springmvc.domain.Categoria;
+import br.dev.diego.springmvc.dto.CategoriaDTO;
 import br.dev.diego.springmvc.services.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -46,6 +49,15 @@ public class CategoriaResource {
     public ResponseEntity<Void> deleteById(@PathVariable Integer id){
         service.deleteById(id);
         return ResponseEntity.noContent().build();
+
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<CategoriaDTO>> findAll(){
+
+        List<Categoria> list = service.findAll();
+        List<CategoriaDTO> listDto = list.stream().map(CategoriaDTO::new).collect(Collectors.toList());
+        return ResponseEntity.ok().body(listDto);
 
     }
 }
