@@ -1,6 +1,7 @@
 package br.dev.diego.springmvc.services;
 
 import br.dev.diego.springmvc.domain.Categoria;
+import br.dev.diego.springmvc.dto.CategoriaDTO;
 import br.dev.diego.springmvc.repositories.CategoriaRepository;
 import br.dev.diego.springmvc.services.exceptions.DataIntegrityException;
 import br.dev.diego.springmvc.services.exceptions.ObjectNotFoundException;
@@ -52,5 +53,9 @@ public class CategoriaService {
     public Page<Categoria> findPage(Integer page, Integer linesPerPage, String direction, String orderBy){
         PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction),orderBy);
         return repo.findAll(pageRequest);
+    }
+
+    public Categoria fromDTO(CategoriaDTO objDTO){
+        return new Categoria(objDTO.getId(), objDTO.getNome());
     }
 }
