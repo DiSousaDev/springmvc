@@ -1,15 +1,18 @@
 package br.dev.diego.springmvc.resources;
 
-import br.dev.diego.springmvc.domain.Cliente;
+import br.dev.diego.springmvc.domain.Categoria;
 import br.dev.diego.springmvc.domain.Cliente;
 import br.dev.diego.springmvc.dto.ClienteDTO;
+import br.dev.diego.springmvc.dto.ClienteNewDTO;
 import br.dev.diego.springmvc.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,15 @@ public class ClienteResource {
 
         Cliente obj = service.find(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO objDTO){
+        Cliente obj = service.fromDTO(objDTO);
+        obj = service.insert(obj);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+        return ResponseEntity.created(uri).build();
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
