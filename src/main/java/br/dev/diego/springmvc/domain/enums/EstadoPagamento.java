@@ -18,6 +18,10 @@ public enum EstadoPagamento {
         return cod;
     }
 
+    public String getDescricao(){
+        return descricao;
+    }
+
     public String EstadoPagamento(){
         return descricao;
     }
