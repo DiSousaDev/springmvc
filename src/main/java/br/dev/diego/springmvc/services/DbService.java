@@ -5,6 +5,7 @@ import br.dev.diego.springmvc.domain.enums.EstadoPagamento;
 import br.dev.diego.springmvc.domain.enums.TipoCliente;
 import br.dev.diego.springmvc.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -13,6 +14,9 @@ import java.util.Arrays;
 
 @Service
 public class DbService {
+
+    @Autowired
+    private BCryptPasswordEncoder pe;
 
     @Autowired
     private CategoriaRepository categoriaRepository;
@@ -93,7 +97,7 @@ public class DbService {
         estadoRepository.saveAll(Arrays.asList(est1,est2));
         cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 
-        Cliente cli1 = new Cliente(null, "Maria Silva", "diegosous@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+        Cliente cli1 = new Cliente(null, "Maria Silva", "diegosous@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, pe.encode("123"));
 
         String tel1 = "27363323";
         String tel2 = "93838393";
