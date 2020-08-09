@@ -99,7 +99,7 @@ public class DbService {
         cidadeRepository.saveAll(Arrays.asList(c1,c2,c3));
 
         Cliente cli1 = new Cliente(null, "Maria Silva", "diegosous@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, pe.encode("123"));
-        Cliente cli2 = new Cliente(null, "Ana Costa", "diegosous@gmail.com", "31628382740", TipoCliente.PESSOAFISICA, pe.encode("123"));
+        Cliente cli2 = new Cliente(null, "Ana Costa", "me@diego.dev.br", "31628382740", TipoCliente.PESSOAFISICA, pe.encode("123"));
         cli2.addPerfil(Perfil.ADMIN);
 
         String tel1 = "27363323";
