@@ -1,17 +1,19 @@
 package br.dev.diego.springmvc.services;
 
-import br.dev.diego.springmvc.domain.ItemPedido;
-import br.dev.diego.springmvc.domain.PagamentoComBoleto;
-import br.dev.diego.springmvc.domain.Pedido;
+import br.dev.diego.springmvc.domain.*;
 
-import br.dev.diego.springmvc.domain.Produto;
 import br.dev.diego.springmvc.domain.enums.EstadoPagamento;
 import br.dev.diego.springmvc.repositories.ClienteRepository;
 import br.dev.diego.springmvc.repositories.ItemPedidoRepository;
 import br.dev.diego.springmvc.repositories.PagamentoRepository;
 import br.dev.diego.springmvc.repositories.PedidoRepository;
+import br.dev.diego.springmvc.security.UserSS;
+import br.dev.diego.springmvc.services.exceptions.AuthorizationException;
 import br.dev.diego.springmvc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -67,4 +69,15 @@ public class PedidoService {
         emailService.sendOrderConfirmationHtmlEmail(obj);
         return obj;
     }
+
+    public Page<Pedido> findPage(Integer page, Integer linesPerPage, String direction, String orderBy){
+        UserSS user = UserService.authenticated();
+        if(user == null){
+            throw new AuthorizationException("Acesso Negado");
+        }
+        PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction),orderBy);
+        Cliente cliente = clienteService.find(user.getId());
+        return repo.findByCliente(cliente, pageRequest);
+    }
+
 }
