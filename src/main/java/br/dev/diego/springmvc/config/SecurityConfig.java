@@ -3,6 +3,7 @@ package br.dev.diego.springmvc.config;
 import java.util.Arrays;
 
 import br.dev.diego.springmvc.security.JWTAutenticationFilter;
+import br.dev.diego.springmvc.security.JWTAuthorizationFilter;
 import br.dev.diego.springmvc.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PUBLIC_MATCHERS).permitAll()
                 .anyRequest().authenticated();
         http.addFilter(new JWTAutenticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
