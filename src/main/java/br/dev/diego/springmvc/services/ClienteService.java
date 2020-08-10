@@ -2,11 +2,14 @@ package br.dev.diego.springmvc.services;
 
 import br.dev.diego.springmvc.domain.*;
 import br.dev.diego.springmvc.domain.Cliente;
+import br.dev.diego.springmvc.domain.enums.Perfil;
 import br.dev.diego.springmvc.domain.enums.TipoCliente;
 import br.dev.diego.springmvc.dto.ClienteDTO;
 import br.dev.diego.springmvc.dto.ClienteNewDTO;
 import br.dev.diego.springmvc.repositories.ClienteRepository;
 import br.dev.diego.springmvc.repositories.EnderecoRepository;
+import br.dev.diego.springmvc.security.UserSS;
+import br.dev.diego.springmvc.services.exceptions.AuthorizationException;
 import br.dev.diego.springmvc.services.exceptions.DataIntegrityException;
 import br.dev.diego.springmvc.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,12 @@ public class ClienteService {
     private EnderecoRepository enderecoRepository;
 
     public Cliente find(Integer id){
+
+        UserSS user = UserService.authenticated();
+        if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())){
+            throw new AuthorizationException("Acesso negado.");
+        }
+
         Optional<Cliente> obj = repo.findById(id);
         return obj.orElseThrow(() -> new ObjectNotFoundException(
                 "Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
